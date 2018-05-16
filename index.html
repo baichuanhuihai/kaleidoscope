@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			*{
+				margin:0;
+				padding:0;
+			}
+			html,body{
+				height:100%;
+			}
+			body{
+				background:black;
+			}
+			.image{
+				position: relative;
+				width:120px;
+				height:180px;
+				margin:0 auto;
+				padding-top:150px;
+				/*perspective: 800;
+				-webkit-perspective: 800;*/
+				transform: perspective(800px) rotateX(-10deg) rotateY(0deg);
+				transform-style: preserve-3d;
+			}
+			.img{
+				border:4px solid white;
+				width:120px;
+				position: absolute;
+				border-radius: 4px;
+				box-shadow: 0px 0px 10px #fff;
+				/*倒影的设置*/
+				-webkit-box-reflect:below 10px -webkit-linear-gradient(top,rgba(0,0,0,0) 50%,rgba(0,0,0,.5) 100%);
+			}
+			/*.img1{
+				transform: rotateX(0deg) rotateY(36deg)  translateZ(300px);
+			}
+			.img2{
+				transform: rotateX(0deg) rotateY(72deg)  translateZ(300px);	
+			}
+			.img3{
+				transform: rotateX(0deg) rotateY(108deg)  translateZ(300px);
+			}
+			.img4{
+				transform: rotateX(0deg) rotateY(144deg) translateZ(300px);
+			}
+			.img5{
+				transform: rotateX(0deg) rotateY(180deg) translateZ(300px);
+			}
+			.img6{
+				transform: rotateX(0deg) rotateY(216deg)  translateZ(300px);
+			}
+			.img7{
+				transform: rotateX(0deg) rotateY(252deg)  translateZ(300px);
+			}
+			.img8{
+				transform: rotateX(0deg) rotateY(288deg)  translateZ(300px);
+			}
+			.img9{
+				transform: rotateX(0deg) rotateY(324deg)  translateZ(300px);
+			}
+			.img10{
+				transform: rotateX(0deg) rotateY(360deg)  translateZ(300px);
+			}*/
+			.img img{
+				width:100%;
+				display: block;
+				-webkit-user-select:none;
+				-moz-user-select:none;
+				-ms-user-select:none;
+				user-select:none;
+			}
+			.image p {
+				width: 1200px;
+			    height: 1200px;
+			    background: -webkit-radial-gradient(center center,600px 600px,rgba(255,255,255,.5),rgba(0,0,0,0));
+			    position: absolute;
+			    top: 50%;
+			    left: 50%;
+			    margin-top: -484px;
+			    margin-left: -600px;
+			    border-radius: 600px;
+			    transform: rotateX(90deg);
+			}
+		</style>
+	</head>
+	<body>
+		<div class="image">
+			<div class="img img1"><img src="img/1.png"/></div>
+			<div class="img img2"><img src="img/2.png"/></div>
+			<div class="img img3"><img src="img/3.png"/></div>
+			<div class="img img4"><img src="img/4.png"/></div>
+			<div class="img img5"><img src="img/5.png"/></div>
+			<div class="img img6"><img src="img/6.png"/></div>
+			<div class="img img7"><img src="img/7.png"/></div>
+			<div class="img img8"><img src="img/8.png"/></div>
+			<div class="img img9"><img src="img/9.png"/></div>
+			<div class="img img10"><img src="img/5.png"/></div>
+			<p></p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		$(function(){
+
+			var imgL=$(".image .img").size();
+			var deg=360/imgL;
+			var roY=0,roX=-10;
+			var xN=0,yN=0;
+			var play=null;
+		
+			$(".image .img").each(function(i){
+				$(this).css({
+					<!--translateZ 定义2d旋转沿着z轴-->
+					"transform":"rotateY("+i*deg+"deg) translateZ(300px)"
+				});
+				<!--防止图片被拖拽-->
+				$(this).attr('ondragstart','return false');
+			});
+		
+			$(document).mousedown(function(ev){
+				var x_=ev.clientX;
+				var y_=ev.clientY;
+				clearInterval(play);
+				console.log('我按下了');
+				$(this).bind('mousemove',function(ev){
+					/*获取当前鼠标的坐标*/
+					var x=ev.clientX;
+					var y=ev.clientY;
+					/*两次坐标之间的距离*/
+					xN=x-x_;
+					yN=y-y_;
+	
+					roY+=xN*0.2;
+					roX-=yN*0.1;
+					console.log('移动');
+					//$('body').append('<div style="width:5px;height:5px;position:absolute;top:'+y+'px;left:'+x+'px;background-color:red"></div>');
+	
+					$('.image').css({
+						 transform:'perspective(800px) rotateX('+roX+'deg) rotateY('+roY+'deg)'
+					});
+					/*之前的鼠标坐标*/
+					x_=ev.clientX;
+					y_=ev.clientY;
+	
+				});
+			}).mouseup(function(){
+				$(this).unbind('mousemove');
+				var play=setInterval(function(){
+			   
+					xN*=0.95;
+					yN*=0.95
+					if(Math.abs(xN)<1 && Math.abs(yN)<1){
+						clearInterval(play);
+					}
+					roY+=xN*0.2;
+					roX-=yN*0.1;
+					$('.image').css({
+						 transform:'perspective(800px) rotateX('+roX+'deg) rotateY('+roY+'deg)'
+					});
+	
+				},30);
+	
+			});
+		
+		});
+</script>
+</html>
